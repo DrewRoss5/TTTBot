@@ -1,5 +1,6 @@
 #include <iostream>
 #include "board.h"
+#include "bot.h"
 
 void player_move(GameBoard& board, int symbol){
     unsigned int row, col;
@@ -18,20 +19,27 @@ void player_move(GameBoard& board, int symbol){
 
 int main(){
     GameBoard board;
+    Bot bot(&board, SYM_X);
+    std::cout << "Bot intialized" << std::endl;
     int turn = 0;
-    int symbol = SYM_X;
     while (turn < 9){
+        bot.take_turn();
         system("clear");
         board.display();
-        player_move(board, symbol);
-        int winner = board.check_win();
-        if (winner){
-            system("clear");
-            board.display();
-            std::cout << "Winner: Player " << symbol << std::endl;
+        turn++;
+        if (board.check_win() != SYM_NONE){
+            std::cout << "Bot wins" << std::endl;
             return 0;
         }
+        player_move(board, SYM_O);
+        system("clear");
+        board.display();
         turn++;
-        symbol = 3 ^ symbol;
+        if (board.check_win() != SYM_NONE){
+            std::cout << "Player wins" << std::endl;
+            return 0;
+        }
+        
     }
+    std::cout << "Tie!" << std::endl;
 }
