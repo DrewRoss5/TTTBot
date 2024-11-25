@@ -13,6 +13,7 @@ class GameBoard{
         unsigned int get_cell(unsigned int row, unsigned int col) const;
         void update_cell(unsigned int row, unsigned int col, unsigned int symbol);
         unsigned int check_win() const;
+        unsigned int get_free_spaces() const;
         void display() const;
     private:
         std::vector<unsigned int> board;

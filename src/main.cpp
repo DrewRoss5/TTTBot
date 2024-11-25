@@ -31,6 +31,8 @@ int main(){
             std::cout << "Bot wins" << std::endl;
             return 0;
         }
+        if (turn == 9)
+            break;
         player_move(board, SYM_O);
         system("clear");
         board.display();

@@ -9,9 +9,11 @@ class Bot{
         void take_turn();
     private:    
         GameBoard* board;
-        std::vector<unsigned int> possible_moves;
         unsigned int symbol;
-        void get_moves();
+        unsigned int move_choice;
+        std::vector<unsigned int> get_moves(GameBoard* game);
+        void apply_move(int move, GameBoard* game);
+        int evaluate(GameBoard* game, int depth); 
         unsigned int decide();
 };
 
