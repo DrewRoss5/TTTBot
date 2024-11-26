@@ -21,7 +21,7 @@ int main(){
     GameBoard board;
     Bot bot(&board, SYM_X);
     std::cout << "Bot intialized" << std::endl;
-    int turn = 0;
+    int turn {0};
     while (turn < 9){
         std::cout << "Bot turn:" << std::endl;
         bot.take_turn();

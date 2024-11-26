@@ -44,7 +44,7 @@ unsigned GameBoard::check_win() const{
 
 // returns the number of free spaces left in the board
 unsigned int GameBoard::get_free_spaces() const{
-    int count = 0;
+    int count {0};
     for (int i = 0; i < 9; i++){
         if (!this->board[i])
             count++;
