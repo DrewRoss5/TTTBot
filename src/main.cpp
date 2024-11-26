@@ -19,28 +19,30 @@ void player_move(GameBoard& board, int symbol){
 
 int main(){
     GameBoard board;
-    Bot bot(&board, SYM_X);
+    Bot bot(&board, SYM_O);
     std::cout << "Bot intialized" << std::endl;
     int turn {0};
+    board.display();
     while (turn < 9){
-        std::cout << "Bot turn:" << std::endl;
-        bot.take_turn();
-        board.display();
-        turn++;
-        if (board.check_win() != SYM_NONE){
-            std::cout << "Bot wins" << std::endl;
-            return 0;
-        }
-        if (turn == 9)
-            break;
-        player_move(board, SYM_O);
+        player_move(board, SYM_X);
+        system("clear");
         board.display();
         turn++;
         if (board.check_win() != SYM_NONE){
             std::cout << "Player wins" << std::endl;
             return 0;
         }
+        if (turn == 9)
+            break;
+        std::cout << "Bot turn:" << std::endl;
+        bot.take_turn();
         system("clear");
+        board.display();
+        turn++;
+        if (board.check_win() != SYM_NONE){
+            std::cout << "Bot wins" << std::endl;
+            return 0;
+        }
     }
     std::cout << "Tie!" << std::endl;
 }
