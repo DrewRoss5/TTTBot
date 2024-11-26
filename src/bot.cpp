@@ -9,8 +9,8 @@ Bot::Bot(GameBoard* board_ptr, unsigned int symbol){
 
 // plays the bot's next move on the board
 void Bot::take_turn(){
-    this->evaluate(this->board, 0);
-    apply_move(this->move_choice, this->board);
+    this->evaluate(this->board, this->symbol, 0);
+    apply_move(this->move_choice, this->symbol, this->board);
 }
 
 // gets every legal move the bot can play from a given board
@@ -31,20 +31,21 @@ std::vector<unsigned int> Bot::get_moves(GameBoard* game = nullptr){
 }
 
 // applies a move, represented as an integer to a given board
-void Bot::apply_move(int move, GameBoard* game){
+void Bot::apply_move(int move, int symbol, GameBoard* game){
     int col = move % 10;
     move -= col;
     int row = move / 10;
-    game->update_cell(row, col, this->symbol); 
+    game->update_cell(row, col, symbol); 
 }
 
 // evaluates the value of a game board at a given depth
-int Bot::evaluate(GameBoard* board, int depth){
+int Bot::evaluate(GameBoard* board, int to_play, int depth){
     int winner = board->check_win();
     if (winner != SYM_NONE){
-        if (winner == this->symbol)
+        if (winner == this->symbol){
             return (depth == 1) ? 100 : 1; // this may return 100 as the model should ALWAYS take a move that will instantly win it the game
-        return (depth == 1) ? -10000 : -2; // this may return 100 as the model should NEVER take a move that will instantly loose it the game (unless all moves are loosing)
+        }
+        return (depth == 1) ? -100 : -2; // this may return 100 as the model should NEVER take a move that will instantly loose it the game (unless all moves are loosing)
     }
     // check base cases (game is drawn or won)
     if (!board->get_free_spaces())
@@ -57,8 +58,8 @@ int Bot::evaluate(GameBoard* board, int depth){
     int parent_val = 0;
     for (int i = 0; i < move_count; i++){
         GameBoard tmp = *board;
-        this->apply_move(moves[i], &tmp);
-        int value = evaluate(&tmp, depth + 1);
+        this->apply_move(moves[i],to_play, &tmp);
+        int value = evaluate(&tmp, (3 ^ to_play), depth + 1); // the three is used to "toggle" the symbols, one for "X" and two for "O"
         parent_val += value;
         if (value > max){
             max = value;
@@ -70,11 +71,5 @@ int Bot::evaluate(GameBoard* board, int depth){
         this->move_choice = moves[max_index];
     return parent_val;
 
-
-}
-
-// returns the move the bot makes
-unsigned int Bot::decide(){
-    return this->evaluate(this->board, 0);
 
 }
