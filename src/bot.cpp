@@ -44,7 +44,7 @@ int Bot::evaluate(GameBoard* board, int to_play, int depth){
         if (winner == this->symbol){
             return (depth == 1) ? 100 : 1; // this may return 100 as the model should ALWAYS take a move that will instantly win it the game
         }
-        return (depth == 1) ? -100 : -2; // this may return -100 as the model should NEVER take a move that will instantly loose it the game (unless all moves are loosing)
+        return (depth < 3) ? -100 : -2; // this may return -100 as the model should NEVER take a move that will instantly loose it the game (unless all moves are loosing)
     }
     // check base cases (game is drawn or won)
     if (!board->get_free_spaces())
