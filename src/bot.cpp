@@ -41,9 +41,8 @@ void Bot::apply_move(int move, int symbol, GameBoard* game){
 int Bot::evaluate(GameBoard* board, int to_play, int depth){
     int winner = board->check_win();
     if (winner != SYM_NONE){
-        if (winner == this->symbol){
+        if (winner == this->symbol)
             return (depth == 1) ? 100 : 1; // this may return 100 as the model should ALWAYS take a move that will instantly win it the game
-        }
         return (depth < 3) ? -100 : -2; // this may return -100 as the model should NEVER take a move that will instantly loose it the game (unless all moves are loosing)
     }
     // check base cases (game is drawn or won)
@@ -52,19 +51,25 @@ int Bot::evaluate(GameBoard* board, int to_play, int depth){
     // evaluate each possible move from this point
     std::vector<unsigned int> moves = get_moves(board);
     int move_count = moves.size();
-    int max {-1000}, max_index {-1}, parent_val {0};
+    int max {-1000}, max_index {-1}, min {1000};
     for (int i = 0; i < move_count; i++){
         GameBoard tmp = *board;
         this->apply_move(moves[i], to_play, &tmp);
         int value = evaluate(&tmp, (3 ^ to_play), depth + 1);
-        parent_val += value;
         if (value > max){
             max = value;
             max_index = i;
         }
+        else if (value < min)
+            min = value;
+
     }
     // if we've reached the end, update the chosen move
     if (depth == 0)
         this->move_choice = moves[max_index];
-    return parent_val;
+    // check if this a maximizing node, and return the corresponding value
+    if (to_play == this->symbol)
+        return max;
+    else
+        return min;
 }
