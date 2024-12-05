@@ -49,7 +49,7 @@ int Bot::evaluate(int to_play, int depth){
     if (winner != SYM_NONE){
         if (winner == this->symbol)
             return (depth == 1) ? 100 : 1; // this may return 100 as the model should ALWAYS take a move that will instantly win it the game
-        return (depth < 3) ? -200 : -2; // this may return -100 as the model should NEVER take a move that will instantly lose it the game (unless all moves are loosing)
+        return (depth < 4) ? -100 : -1; // this may return -200 as the model should NEVER take a move that will instantly lose it the game (unless all moves are loosing)
     }
     if (!board->get_free_spaces())
         return 0;
@@ -60,10 +60,10 @@ int Bot::evaluate(int to_play, int depth){
     for (int i = 0; i < move_count; i++){
         this->apply_move(moves[i], to_play);
         // display the current board state to show the algorithm's progress
-        if (this->debug){
+        if (this->debug && depth < 4){
             std::cout << "Bot thinking..." << std::endl;
             this->board->display();
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
             system("clear");
         }
         int value = evaluate((3 ^ to_play), depth + 1);
