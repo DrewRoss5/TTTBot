@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <utility>
+#include <stack>
 
 #include "board.h"
 
@@ -17,8 +19,18 @@ unsigned GameBoard::get_cell(unsigned int row, unsigned int col) const{
 // sets the cell at row, col to a given value. This is a non-operation if the cell is already occupied
 void GameBoard::update_cell(unsigned int row, unsigned int col, unsigned int symbol){
     int index = (row * 3) + col;
-    if (this->board[index] == SYM_NONE)
+    if (this->board[index] == SYM_NONE){       
         this->board[index] = symbol;
+        std::pair<int, int> move(row, col);
+        this->moves.push(move);
+    }
+}
+
+// undoes the last applied move
+void GameBoard::rollback(){
+    std::pair<int, int> last_move = this->moves.top();
+    this->board[(last_move.first * 3) + last_move.second] = SYM_NONE;
+    moves.pop();
 }
 
 // checks if there is a winner, returns SYM_NONE if there is no winner, or the symbol that won if there is

@@ -11,9 +11,9 @@ class Bot{
         GameBoard* board;
         unsigned int symbol;
         unsigned int move_choice;
-        std::vector<unsigned int> get_moves(GameBoard* game);
-        void apply_move(int move, int symbol, GameBoard* game);
-        int evaluate(GameBoard* game, int to_play, int depth); 
+        std::vector<unsigned int> get_moves();
+        void apply_move(int move, int symbol);
+        int evaluate(int to_play, int depth); 
 };
 
 #endif
