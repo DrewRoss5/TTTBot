@@ -17,10 +17,12 @@ void player_move(GameBoard& board, int symbol){
 
 }
 
-int main(){
+int main(int argc, char** argv){
+    bool debug {false};
+    if (argc == 2 && (std::string) argv[1] == "debug")
+        debug = true;
     GameBoard board;
-    Bot bot(&board, SYM_O);
-    std::cout << "Bot intialized" << std::endl;
+    Bot bot(&board, SYM_O, debug);
     int turn {0};
     board.display();
     while (turn < 9){

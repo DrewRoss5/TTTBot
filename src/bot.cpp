@@ -1,12 +1,15 @@
 #include <iostream>
 #include <limits>
 #include <stack>
+#include <chrono>
+#include <thread>
 #include "bot.h"
 
 // initializes the bot with a pointer
-Bot::Bot(GameBoard* board_ptr, unsigned int symbol){
+Bot::Bot(GameBoard* board_ptr, unsigned int symbol, bool debug){
     this->board = board_ptr;
     this->symbol = symbol;
+    this->debug = debug;
 }
 
 // plays the bot's next move on the board
@@ -56,6 +59,13 @@ int Bot::evaluate(int to_play, int depth){
     int max {std::numeric_limits<int>::min()}, max_index {-1}, min {std::numeric_limits<int>::max()};
     for (int i = 0; i < move_count; i++){
         this->apply_move(moves[i], to_play);
+        // display the current board state to show the algorithm's progress
+        if (this->debug){
+            std::cout << "Bot thinking..." << std::endl;
+            this->board->display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            system("clear");
+        }
         int value = evaluate((3 ^ to_play), depth + 1);
         this->board->rollback();
         if (value > max){

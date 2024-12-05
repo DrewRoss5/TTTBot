@@ -22,8 +22,6 @@ class GameBoard{
     private:
         std::vector<unsigned int> board;
         std::stack<std::pair<int, int>> moves;
-
-
 };
 
 #endif
